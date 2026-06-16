@@ -1,0 +1,29 @@
+{
+  "name": "campanas-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "lint": "eslint \"app/**/*.{js,jsx}\"",
+    "lint:gate": "node tests/eslint-gate.mjs",
+    "lint:baseline": "node tests/eslint-gate.mjs --update",
+    "test": "node tests/run-tests.mjs",
+    "smoke": "node tests/smoke-boot.mjs && node tests/smoke-prod.mjs",
+    "smoke:screens": "node tests/smoke-screens.mjs",
+    "verify": "node build.mjs && node tests/eslint-gate.mjs && node tests/run-tests.mjs && node tests/smoke-boot.mjs && node tests/smoke-prod.mjs && node tests/smoke-screens.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "jsdom": "^24.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "dependencies": {
+    "jsdom": "^24.1.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

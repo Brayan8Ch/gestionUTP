@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Campañas · Workspace</title>
+
+  <template id="__bundler_thumbnail">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <rect width="100" height="100" rx="20" fill="#051C2C" />
+      <rect x="30" y="30" width="40" height="40" rx="8" fill="#2251FF" opacity="0.95" />
+    </svg>
+  </template>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* Modo oscuro (BUG-DC02): aplica el tema guardado ANTES de pintar para evitar
+       el flash. "dark"/"light" explícito, o "auto" = preferencia del sistema. */
+    (function () {
+      try {
+        var t = localStorage.getItem("app-theme") || "auto";
+        var dark = t === "dark" || (t === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      } catch (e) {}
+    })();
+  </script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            background: 'oklch(var(--c-bg) / <alpha-value>)',
+            foreground: 'oklch(var(--c-fg) / <alpha-value>)',
+            surface: 'oklch(var(--c-surface) / <alpha-value>)',
+            'surface-elevated': 'oklch(var(--c-elevated) / <alpha-value>)',
+            card: 'oklch(var(--c-elevated) / <alpha-value>)',
+            'card-foreground': 'oklch(var(--c-fg) / <alpha-value>)',
+            popover: 'oklch(var(--c-elevated) / <alpha-value>)',
+            'popover-foreground': 'oklch(var(--c-fg) / <alpha-value>)',
+            primary: 'oklch(var(--c-primary) / <alpha-value>)',
+            'primary-foreground': 'oklch(var(--c-bg) / <alpha-value>)',
+            secondary: 'oklch(var(--c-muted) / <alpha-value>)',
+            'secondary-foreground': 'oklch(var(--c-fg) / <alpha-value>)',
+            muted: 'oklch(var(--c-muted) / <alpha-value>)',
+            'muted-foreground': 'oklch(var(--c-muted-fg) / <alpha-value>)',
+            accent: 'oklch(var(--c-muted) / <alpha-value>)',
+            'accent-foreground': 'oklch(var(--c-fg) / <alpha-value>)',
+            destructive: 'oklch(0.60 0.22 25 / <alpha-value>)',
+            'destructive-foreground': 'oklch(0.99 0 0 / <alpha-value>)',
+            border: 'oklch(var(--c-border) / <alpha-value>)',
+            input: 'oklch(var(--c-border) / <alpha-value>)',
+            ring: 'oklch(var(--c-brand) / <alpha-value>)',
+            brand: 'oklch(var(--c-brand) / <alpha-value>)',
+            'brand-foreground': 'oklch(0.99 0 0 / <alpha-value>)',
+            'brand-soft': 'oklch(var(--c-brand-soft) / <alpha-value>)',
+            'accent-violet': 'oklch(var(--c-violet) / <alpha-value>)',
+            'accent-pink': 'oklch(0.65 0.21 10 / <alpha-value>)',
+            'accent-amber': 'oklch(0.78 0.16 75 / <alpha-value>)',
+            'accent-green': 'oklch(0.70 0.17 155 / <alpha-value>)',
+          },
+          borderRadius: {
+            sm: 'calc(var(--radius) - 8px)',
+            md: 'calc(var(--radius) - 6px)',
+            lg: 'calc(var(--radius) - 2px)',
+            xl: 'calc(var(--radius) + 2px)',
+            '2xl': 'calc(var(--radius) + 6px)',
+            '3xl': 'calc(var(--radius) + 10px)',
+          },
+          boxShadow: {
+            soft: '0 0 0 0.5px rgba(0,0,0,0.035), 0 1px 3px rgba(0,0,0,0.05)',
+            elevated: '0 0 0 0.5px rgba(0,0,0,0.04), 0 16px 44px -14px rgba(0,0,0,0.20)',
+            glow: '0 0 0 0.5px rgba(0,0,0,0.04), 0 8px 26px -10px rgba(0,0,0,0.14)',
+          },
+          transitionTimingFunction: {
+            spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            glide: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      /* Steep — soft dawn on a marble dashboard: Ink on Fog, single Rust accent. */
+      --c-bg: 0.974 0.0015 286;       /* Fog #f7f7f8 — page canvas */
+      --c-fg: 0.22 0.006 264;         /* Ink #17191c */
+      --c-surface: 0.945 0.002 286;   /* deeper fog fill — quiet contrast against canvas */
+      --c-elevated: 1 0 0;            /* Pure white cards */
+      --c-primary: 0.22 0.006 264;    /* Ink — primary fill (dark CTA) */
+      --c-muted: 0.958 0.002 286;
+      --c-muted-fg: 0.575 0.013 268;  /* Graphite #777b86 */
+      --c-border: 0.893 0.003 286;    /* Apple hairline */
+      --c-brand: 0.55 0.19 252;      /* Apple blue #0071e3 — single intentional accent */
+      --c-brand-soft: 0.93 0.045 252; /* Soft blue wash */
+      --c-violet: 0.55 0.20 285;      /* Indigo — second data voice */
+      --radius: 0.8rem;               /* HIG continuous corners: cards ~16-18px */
+      /* ===== Liquid Glass motion tokens ===== */
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* press pop / playful */
+      --ease-glide: cubic-bezier(0.22, 1, 0.36, 1);     /* slides, reveals */
+      --dur-press: 120ms; --dur-fast: 180ms; --dur-base: 280ms;
+      /* ===== Liquid Glass material tokens ===== */
+      --glass-fill: color-mix(in oklab, oklch(var(--c-elevated)) 66%, transparent);
+      --glass-fill-2: color-mix(in oklab, oklch(var(--c-elevated)) 48%, transparent);
+      --glass-edge: color-mix(in oklab, oklch(var(--c-elevated)) 70%, oklch(var(--c-border)));
+      --glass-specular: color-mix(in oklab, white 80%, transparent);
+    }
+
+    /* ===== Modo oscuro (BUG-DC02) — mismos tokens, paleta nocturna ===== */
+    html.dark {
+      --c-bg: 0.18 0.006 264;         /* canvas casi negro azulado */
+      --c-fg: 0.95 0.002 286;         /* texto casi blanco */
+      --c-surface: 0.225 0.006 264;   /* relleno sutil sobre el canvas */
+      --c-elevated: 0.255 0.007 264;  /* tarjetas elevadas */
+      --c-primary: 0.95 0.002 286;    /* CTA claro sobre fondo oscuro */
+      --c-muted: 0.27 0.007 264;
+      --c-muted-fg: 0.68 0.012 268;   /* texto secundario */
+      --c-border: 0.32 0.008 264;     /* hairline visible en oscuro */
+      --c-brand: 0.62 0.17 252;       /* azul un punto más luminoso */
+      --c-brand-soft: 0.30 0.06 252;
+      --c-violet: 0.62 0.18 285;
+      --glass-specular: color-mix(in oklab, white 22%, transparent);
+    }
+    html.dark .is-reader .brief-sections input,
+    html.dark .is-reader .brief-sections textarea,
+    html.dark .is-reader .brief-sections select { color: oklch(var(--c-fg)); }
+
+    *, ::before, ::after { border-color: oklch(var(--c-border)); }
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    body {
+      background-color: oklch(var(--c-bg));
+      color: oklch(var(--c-fg));
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: -0.011em;
+      transition: background-color .4s ease, color .4s ease;
+    }
+    /* SF-Pro-inspired display scale: weight + tracking tighten as size grows */
+    h1, h2 { font-family: inherit; letter-spacing: -0.022em; font-weight: 600; }
+    h3, h4 { font-family: inherit; letter-spacing: -0.014em; font-weight: 600; }
+    .text-4xl, .text-5xl, .text-6xl, .font-display {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+      font-weight: 700; letter-spacing: -0.03em;
+    }
+    .text-3xl { letter-spacing: -0.022em; font-weight: 700; }
+    .text-2xl { letter-spacing: -0.018em; font-weight: 600; }
+    .text-gradient-brand {
+      background-image: linear-gradient(120deg, oklch(0.42 0.15 252), oklch(0.60 0.19 252));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    /* ===== Liquid Glass materials — token-driven so they adapt to light/dark moods ===== */
+    .glass {
+      background: var(--glass-fill);
+      backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px);
+    }
+    .glass-panel {
+      background: var(--glass-fill);
+      backdrop-filter: saturate(180%) blur(22px); -webkit-backdrop-filter: saturate(180%) blur(22px);
+      border: 1px solid var(--glass-edge);
+      box-shadow: inset 0 1px 0 var(--glass-specular), 0 8px 24px rgba(8,18,40,0.16), 0 2px 6px rgba(8,18,40,0.08);
+    }
+    .glass-tile {
+      background: linear-gradient(180deg, color-mix(in oklab, oklch(var(--c-elevated)) 92%, transparent) 0%, color-mix(in oklab, oklch(var(--c-elevated)) 64%, transparent) 100%);
+      border: 1px solid var(--glass-edge);
+      box-shadow: inset 0 1px 0 var(--glass-specular), 0 1px 2px rgba(8,18,40,0.10);
+    }
+    .glass-tile-active {
+      background: linear-gradient(180deg, oklch(0.62 0.17 252) 0%, oklch(0.50 0.19 252) 100%);
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 4px 14px rgba(0,113,227,0.45);
+    }
+    /* ===== Press physics: micro-interaction <100ms, transform-only ===== */
+    button:not(:disabled), a[href], [role="button"] {
+      transition-property: transform, opacity, background-color, color, border-color, box-shadow;
+      transition-duration: var(--dur-press);
+      transition-timing-function: var(--ease-spring);
+    }
+    button:not(:disabled):active, a[href]:active, [role="button"]:active { transform: scale(0.97); }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    }
+    .hero-radial {
+      background: radial-gradient(60% 60% at 50% 0%, color-mix(in oklab, oklch(var(--c-brand-soft)) 55%, transparent) 0%, transparent 70%);
+    }
+    select option { color: #18181b; }
+    /* iOS-style bottom sheet entrance (mobile "Más") */
+    @keyframes sheet-up { from { transform: translateY(28px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .sheet-up { animation: sheet-up 0.3s var(--ease-glide) both; }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fade-in 0.22s ease-out both; }
+    /* Staggered entrance — visible end-state is base; only animates when motion is allowed */
+    @media (prefers-reduced-motion: no-preference) {
+      @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+      .rise { animation: rise 0.5s var(--ease-glide) both; }
+      .rise-1 { animation-delay: 60ms; } .rise-2 { animation-delay: 120ms; } .rise-3 { animation-delay: 180ms; } .rise-4 { animation-delay: 240ms; }
+    }
+    /* Custom date input affordance */
+    input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; cursor: pointer; }
+
+    /* ===== Reader mode: present the brief as a clean read-only document ===== */
+    .is-reader .brief-sections input,
+    .is-reader .brief-sections textarea,
+    .is-reader .brief-sections select {
+      border-color: transparent !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      -webkit-appearance: none !important;
+      appearance: none !important;
+      pointer-events: none !important;
+      resize: none !important;
+      cursor: default !important;
+    }
+    .is-reader .brief-sections input,
+    .is-reader .brief-sections textarea { padding-left: 0 !important; }
+    .is-reader .brief-sections select { padding-left: 0 !important; padding-right: 0 !important; }
+    .is-reader .brief-sections select ~ svg { display: none !important; }
+    .is-reader .brief-sections div:has(> select) { background: transparent !important; }
+    .is-reader .brief-sections input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+    /* Hide all editing chrome (add / remove / reset), keep checkboxes + tagged displays */
+    .is-reader .brief-sections button:not([role="checkbox"]):not(.reader-keep):not(.reader-chip) { display: none !important; }
+    .is-reader .edit-only { display: none !important; }
+    .is-reader .brief-sections button[role="checkbox"],
+    .is-reader .brief-sections .reader-keep { pointer-events: none !important; cursor: default !important; }
+    .is-reader .brief-sections .reader-keep { border-color: transparent !important; background: transparent !important; padding-left: 0 !important; }
+    /* reader-chip: kept visible WITH its box styling (day toggles, status chips), just non-interactive */
+    .is-reader .brief-sections .reader-chip { pointer-events: none !important; cursor: default !important; }
+
+    @media print {
+      @page { margin: 14mm; }
+      html, body { background: white !important; color: #111 !important; }
+      .print\:hidden { display: none !important; }
+      .print\:mt-6 { margin-top: 1.5rem !important; }
+      section { break-inside: avoid; page-break-inside: avoid; box-shadow: none !important; border-color: #e5e7eb !important; }
+      input, textarea, select { border: none !important; background: transparent !important; box-shadow: none !important; -webkit-appearance: none !important; appearance: none !important; padding: 0 !important; color: #111 !important; font-weight: 500 !important; }
+      input[type="date"]::-webkit-calendar-picker-indicator { display: none !important; }
+      button { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Libraries -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
+
+  <!-- Configuración + capa de sincronización (producción) -->
+  <script src="app/config.js"></script>
+  <script src="app/bugreport.js"></script>
+  <script src="app/sync.js"></script>
+  <script>
+    /* RemoteSync hidrata los datos (y exige login si hay backend
+       configurado) ANTES de cargar la app, en este orden exacto. */
+    RemoteSync.boot([
+      "app/core/templates.js",
+      "app/core/store.js",
+      "app/campanas/brief-pdf.js",
+      "app/core/ui.jsx",
+      "app/shell/profile.jsx",
+      "app/shell/notifications.jsx",
+      "app/shell/search.jsx",
+      "app/shell/period-filter.jsx",
+      "app/shell/confirm-delete.jsx",
+      "app/campanas/setup.jsx",
+      "app/campanas/create.jsx",
+      "app/shell/menu.jsx",
+      "app/shell/navbar.jsx",
+      "app/shell/login.jsx",
+      "app/configuracion/members.jsx",
+      "app/configuracion/fechas.jsx",
+      "app/campanas/gantt.jsx",
+      "app/campanas/cronograma-campanas.jsx",
+      "app/campanas/home.jsx",
+      "app/campanas/brief.jsx",
+      "app/campanas/comms.jsx",
+      "app/campanas/updates.jsx",
+      "app/campanas/brief2.jsx",
+      "app/campanas/speech.jsx",
+      "app/operativa/checklist.jsx",
+      "app/operativa/design-requests.jsx",
+      "app/operativa/day-planner.jsx",
+      "app/operativa/mis-pendientes.jsx",
+      "app/operativa/resumen.jsx",
+      "app/configuracion/ayuda.jsx",
+      "app/configuracion/bug-reports-page.jsx",
+      "app/core/main.jsx",
+    ]);
+  </script>
+</body>
+</html>
