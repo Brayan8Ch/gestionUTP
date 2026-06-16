@@ -420,7 +420,7 @@
     }, [sources, execTick]);
 
     // Secciones colapsables (BUG-A56D): el usuario puede ocultar el Gantt o la tabla.
-    const [showGantt, setShowGantt] = useState(true);
+    const [showGantt, setShowGantt] = useState(false);
     const [showTable, setShowTable] = useState(true);
 
     const [from, setFrom] = useState("");
