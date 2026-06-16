@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "python3 -m http.server 3000",
     "build": "node build.mjs",
     "lint": "eslint \"app/**/*.{js,jsx}\"",
     "lint:gate": "node tests/eslint-gate.mjs",
@@ -13,7 +14,7 @@
     "verify": "node build.mjs && node tests/eslint-gate.mjs && node tests/run-tests.mjs && node tests/smoke-boot.mjs && node tests/smoke-prod.mjs && node tests/smoke-screens.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.28.1",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
