@@ -456,6 +456,10 @@
       return f;
     }, [allRows, from, to, query, campF, perF, chF, stF, sort]);
 
+    const [pageSize, setPageSize] = useState(25);
+    const [page, setPage] = useState(1);
+    useEffect(() => { setPage(1); }, [rows, pageSize]);
+
     // Gantt groups respect campaign/period filters (not date-range — range only narrows the time axis).
     const ganttGroups = useMemo(() => {
       return sources
@@ -531,7 +535,7 @@
                 <tbody>
                   {rows.length === 0 ? (
                     <tr><td colSpan={9} className="px-2 py-10 text-center text-xs text-muted-foreground">Sin ejecuciones para los filtros seleccionados.</td></tr>
-                  ) : rows.map((r) => (
+                  ) : rows.slice((page - 1) * pageSize, page * pageSize).map((r) => (
                     <tr key={r.slug + "|" + r.period + "|" + r.id} className="border-t border-border/60 hover:bg-surface/50">
                       <td className="whitespace-nowrap px-2 py-1.5 tabular-nums">{fmtDM(r.date)}</td>
                       <td className="px-2 py-1.5 capitalize text-muted-foreground">{dayName(r.date)}</td>
@@ -555,6 +559,26 @@
               </table>
             </div>
             }
+            {showTable && rows.length > pageSize && (
+              <div className="flex items-center justify-between border-t border-border/60 px-3 py-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <span className="mr-1">Filas:</span>
+                  {[10, 25, 50, 100].map((n) => (
+                    <button key={n} type="button" onClick={() => setPageSize(n)}
+                      className={cn("rounded px-2 py-0.5 font-medium", pageSize === n ? "bg-brand/10 text-brand" : "hover:bg-muted")}>
+                      {n}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>Página {page} de {Math.ceil(rows.length / pageSize)}</span>
+                  <button type="button" disabled={page === 1} onClick={() => setPage((p) => p - 1)}
+                    className="rounded px-2 py-1 hover:bg-muted disabled:opacity-40">Anterior</button>
+                  <button type="button" disabled={page >= Math.ceil(rows.length / pageSize)} onClick={() => setPage((p) => p + 1)}
+                    className="rounded px-2 py-1 hover:bg-muted disabled:opacity-40">Siguiente</button>
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
