@@ -3,7 +3,7 @@
   const React = window.React;
   const { useMemo, useState, useEffect } = React;
   const S = window.Store;
-  const { LucideIcon, Input, Checkbox, toast } = window;
+  const { LucideIcon, Input, Checkbox, toast, DatePicker } = window;
   const cn = window.cn;
   const STATUS_LABEL = window.STATUS_LABEL, STATUS_TONE = window.STATUS_TONE, PRIORITY_LABEL = window.PRIORITY_LABEL, PRIORITY_TONE = window.PRIORITY_TONE;
 
@@ -558,8 +558,8 @@
           className={cn("min-w-[160px] flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0", compact ? "h-7 px-1 text-[12px]" : "h-8 px-1 text-xs text-white placeholder:text-white/50")} />
         {!compact && (
           <React.Fragment>
-            <input type="date" value={dl} onChange={(e) => setDl(e.target.value)} title="Fecha límite (opcional)"
-              className="h-7 cursor-pointer rounded-full border border-white/20 bg-white/10 px-2 text-[11px] font-medium text-white/80 [color-scheme:dark] focus-visible:outline-none" />
+            <DatePicker value={dl} onChange={(v) => setDl(v)} placeholder="Fecha límite" align="start"
+              className="h-7 rounded-full border-white/20 bg-white/10 px-2 text-[11px] font-medium text-white/80" />
             <select value={who} onChange={(e) => setWho(e.target.value)} title="Responsable del pendiente"
               className="h-7 cursor-pointer rounded-full border border-white/20 bg-white/10 px-2 text-[11px] font-medium text-white/80 focus-visible:outline-none [&>option]:text-foreground">
               <option value="">Para mí</option>
@@ -1023,14 +1023,13 @@
                           </td>
                           <td className="px-1.5 py-1.5 align-top">
                             <div className="flex items-start gap-1.5">
-                              <span className="mt-1 inline-block shrink-0 rounded bg-muted px-1 py-px font-mono text-[9px] tabular-nums text-muted-foreground" title={`ID único: ${r.id}`}>#{String(r.id).replace(/-/g, "").slice(0, 6).toUpperCase()}</span>
                               {canEdit ? (
                                 <textarea defaultValue={r.title || ""} key={`${rowKey(r)}-t`} rows={1}
                                   onBlur={(e) => { const t = e.target.value.trim(); if (t && t !== r.title) updateTask(r, { title: t }); }}
                                   onInput={(e) => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }}
                                   ref={(el) => { if (el) { el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; } }}
                                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.target.blur(); } }} title={r.title}
-                                  className={cn("min-w-0 flex-1 resize-none border-0 bg-transparent px-1 py-0.5 text-xs leading-snug shadow-none outline-none focus:rounded focus:bg-surface", r.status === "done" && "text-muted-foreground line-through")} />
+                                  className={cn("min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-1 py-0.5 text-xs leading-snug shadow-none outline-none focus:rounded focus:bg-surface", r.status === "done" && "text-muted-foreground line-through")} />
                               ) : (
                                 <span className={cn("flex-1 whitespace-pre-wrap break-words py-0.5 text-xs leading-snug", r.status === "done" && "text-muted-foreground line-through")}>{r.title || "—"}</span>
                               )}
@@ -1076,7 +1075,7 @@
                               {["high", "med", "low"].map((p) => <option key={p} value={p}>{PRIORITY_LABEL[p]}</option>)}
                             </select>
                           </td>
-                          <td className="px-1.5 py-1.5"><Input type="date" value={r.deadline || ""} onChange={(e) => updateTask(r, { deadline: e.target.value })} readOnly={!canEdit} className="h-6 w-32 border-0 bg-transparent px-1 text-[11px] shadow-none focus-visible:bg-surface focus-visible:ring-0" /></td>
+                          <td className="px-1.5 py-1.5"><DatePicker value={r.deadline || ""} onChange={(v) => canEdit && updateTask(r, { deadline: v })} disabled={!canEdit} placeholder="—" align="end" className="h-6 border-0 bg-transparent px-1 text-[11px] shadow-none" /></td>
                           <td className="px-1.5 py-1.5">
                             <div className="flex items-center gap-0.5">
                               <button type="button" onClick={() => setTracking(r)} title="Ver tracking del pendiente"

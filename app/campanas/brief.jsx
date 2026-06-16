@@ -3,7 +3,7 @@
   const React = window.React;
   const { useState, useEffect, useMemo, useRef, useContext, createContext } = React;
   const S = window.Store;
-  const { LucideIcon, Button, Input, Textarea, Checkbox, Popover, toast } = window;
+  const { LucideIcon, Button, Input, Textarea, Checkbox, Popover, toast, DatePicker } = window;
   const cn = window.cn;
 
   /* ---------- date helpers ---------- */
@@ -532,8 +532,8 @@
                   <LucideIcon name="X" className="h-3 w-3" />
                 </button>}
               </div>
-              <Input type="date" value={p.date} onChange={(e) => update(p.id, { date: e.target.value })} readOnly={inherited}
-                className="h-6 border-0 bg-transparent p-0 text-sm font-semibold tabular-nums text-foreground shadow-none focus-visible:ring-0" />
+              <DatePicker value={p.date} onChange={(v) => update(p.id, { date: v })} disabled={inherited}
+                className="h-6 border-0 bg-transparent p-0 text-sm font-semibold tabular-nums text-foreground shadow-none" />
             </div>
           ))}
         </div>
@@ -743,7 +743,7 @@
                         </span>
                       </div>
                     ) : (
-                      <Input type="date" value={row[which]} onChange={(e) => update(row.id, { [which]: e.target.value })} className="h-7 bg-surface/60 px-1.5 text-[11px] tabular-nums" />
+                      <DatePicker value={row[which]} onChange={(v) => update(row.id, { [which]: v })} className="h-7 bg-surface/60 px-1.5 text-[11px] tabular-nums" />
                     )}
                   </label>
                 ))}

@@ -4,7 +4,7 @@
   const ReactDOM = window.ReactDOM;
   const { useState, useMemo } = React;
   const S = window.Store;
-  const { LucideIcon, Button, Input, Textarea, Label, OwnerSelect, toast } = window;
+  const { LucideIcon, Button, Input, Textarea, Label, OwnerSelect, toast, DatePicker } = window;
   const cn = window.cn;
 
   const fmtDate = (ts) => ts ? new Date(ts).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" }) : "—";
@@ -233,7 +233,7 @@
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Deadline</Label>
-                <Input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="bg-surface tabular-nums" />
+                <DatePicker value={deadline} onChange={(v) => setDeadline(v)} className="bg-surface tabular-nums" />
               </div>
               <div className="space-y-1">
                 <Label className="text-xs text-muted-foreground">Diseñador (opcional)</Label>

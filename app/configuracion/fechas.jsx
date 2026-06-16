@@ -3,7 +3,7 @@
   const React = window.React;
   const { useState, useEffect } = React;
   const S = window.Store;
-  const { LucideIcon, Button, Input, toast } = window;
+  const { LucideIcon, Button, Input, toast, DatePicker } = window;
   const cn = window.cn;
 
   function GlobalParamsPage() {
@@ -105,8 +105,8 @@
                       className="h-6 flex-1 border-0 bg-transparent p-0 text-[12px] font-medium text-muted-foreground shadow-none focus-visible:ring-0" />
                     {editable && <button type="button" onClick={() => setConfirmDel(p)} aria-label="Eliminar" className="hidden h-5 w-5 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-destructive group-hover/p:flex"><LucideIcon name="X" className="h-3.5 w-3.5" /></button>}
                   </div>
-                  <Input type="date" value={p.date} onChange={(e) => update(p.id, { date: e.target.value })} readOnly={!editable}
-                    className="h-8 border-0 bg-transparent p-0 text-lg font-semibold tabular-nums text-foreground shadow-none focus-visible:ring-0" />
+                  <DatePicker value={p.date} onChange={(v) => update(p.id, { date: v })} disabled={!editable}
+                    className="h-8 border-0 bg-transparent p-0 text-lg font-semibold tabular-nums text-foreground shadow-none" />
                 </div>
               ))}
             </div>

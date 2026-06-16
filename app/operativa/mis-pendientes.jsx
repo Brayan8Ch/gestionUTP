@@ -5,7 +5,7 @@
   const ReactDOM = window.ReactDOM;
   const { useMemo, useState, useEffect } = React;
   const S = window.Store;
-  const { LucideIcon, Input, Checkbox } = window;
+  const { LucideIcon, Input, Checkbox, DatePicker } = window;
   const cn = window.cn;
 
   const DAY = 86400000;
@@ -585,7 +585,7 @@
             </span>
             <Input value={nTitle} onChange={(e) => setNTitle(e.target.value)} placeholder={`¿Qué tienes pendiente${person ? `, ${person.split(" ")[0]}` : ""}?`}
               className="!h-9 !rounded-full min-w-[160px] flex-1 bg-surface px-3.5 text-[13px]" />
-            <Input type="date" value={nDate} onChange={(e) => setNDate(e.target.value)} title="Fecha compromiso"
+            <DatePicker value={nDate} onChange={(v) => setNDate(v)} placeholder="Fecha compromiso" align="start"
               className="!h-9 !rounded-full w-[138px] bg-surface px-3 text-[12px]" />
             <select value={nEst} onChange={(e) => setNEst(e.target.value)} title="Tiempo estimado"
               className="h-9 cursor-pointer rounded-full border border-border bg-surface px-3 text-[12px] font-medium text-foreground focus-visible:outline-none">
@@ -726,8 +726,7 @@
                       ? <span className="mt-0.5 flex h-4 w-4 items-center justify-center rounded bg-accent-pink/10 text-accent-pink" title="Pedido de diseño"><LucideIcon name="Palette" className="h-2.5 w-2.5" /></span>
                       : <Checkbox checked={r.status === "done"} onCheckedChange={() => canEdit && toggle(r)} className={cn("mt-0.5", !canEdit && "opacity-60")} />}</td>
                     <td className="px-2 py-1.5">
-                      <div className="flex items-start gap-1" title={`ID único: ${r.id}`}>
-                        <span className="mt-0.5 inline-block rounded bg-muted px-1 py-px align-middle font-mono text-[9px] tabular-nums text-muted-foreground">#{String(r.id).replace(/-/g, "").slice(0, 6).toUpperCase()}</span>
+                      <div className="flex items-start gap-1">
                         {canEdit && r.origin !== "design" ? (
                           <input defaultValue={r.title || ""} key={`${r.origin}-${r.id}-t`} onBlur={(e) => { const t = e.target.value.trim(); if (t && t !== r.title) updateTask(r, { title: t }); }}
                             onKeyDown={(e) => { if (e.key === "Enter") e.target.blur(); }} title={r.title}

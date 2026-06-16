@@ -327,10 +327,17 @@
           <>
             <div className="fixed inset-0 z-[140]" onClick={() => setOpen(false)} />
             <div className={cn("absolute z-[141] mt-1 w-60 rounded-2xl border border-border bg-surface-elevated p-3 shadow-elevated", align === "end" ? "right-0" : "left-0")}>
-              <div className="mb-2 flex items-center justify-between">
-                <button type="button" onClick={() => setView(new Date(y, m-1, 1))} className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-surface"><LucideIcon name="ChevronLeft" className="h-4 w-4" /></button>
-                <span className="text-[12.5px] font-semibold text-foreground">{MES[m]} {y}</span>
-                <button type="button" onClick={() => setView(new Date(y, m+1, 1))} className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-surface"><LucideIcon name="ChevronRight" className="h-4 w-4" /></button>
+              <div className="mb-2 flex items-center gap-0.5">
+                <button type="button" onClick={() => setView(new Date(y, m-1, 1))} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-surface"><LucideIcon name="ChevronLeft" className="h-4 w-4" /></button>
+                <select value={m} onChange={(e) => setView(new Date(y, +e.target.value, 1))}
+                  className="min-w-0 flex-1 cursor-pointer appearance-none rounded border-0 bg-transparent text-center text-[12.5px] font-semibold text-foreground focus:outline-none">
+                  {MES.map((mes, i) => <option key={i} value={i}>{mes.charAt(0).toUpperCase() + mes.slice(1)}</option>)}
+                </select>
+                <select value={y} onChange={(e) => setView(new Date(+e.target.value, m, 1))}
+                  className="w-[58px] cursor-pointer appearance-none rounded border-0 bg-transparent text-center text-[12.5px] font-semibold text-foreground focus:outline-none">
+                  {Array.from({length: 8}, (_, i) => today.getFullYear() - 2 + i).map((yr) => <option key={yr} value={yr}>{yr}</option>)}
+                </select>
+                <button type="button" onClick={() => setView(new Date(y, m+1, 1))} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-surface"><LucideIcon name="ChevronRight" className="h-4 w-4" /></button>
               </div>
               <div className="mb-1 grid grid-cols-7 gap-0.5">
                 {DOW.map((d, i) => <span key={i} className="flex h-6 items-center justify-center text-[9px] font-semibold uppercase text-muted-foreground/70">{d}</span>)}
